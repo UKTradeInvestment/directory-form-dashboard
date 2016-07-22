@@ -1,3 +1,47 @@
 $images-dir: '/images/';
 @import 'govstrap';
 
+.dashboard {
+  #global-header .header-wrapper,
+  #global-header-bar,
+  #global-cookie-message p,
+  #footer .footer-wrapper,
+  #content {
+	max-width: 100%;
+  }
+}
+
+.data-module {
+  padding: 40px;
+  margin: 0 50px;
+  text-align: center;
+  border-bottom: 10px solid $black;
+
+  &:last-child {
+	border-bottom: 0;
+	padding-bottom: 0;
+  }
+
+  h2 {
+	margin-top: 30px;
+  }
+
+}
+
+
+@mixin bold-120($line-height: (80 / 80), $line-height-640: (55 / 53), $tabular-numbers: false, $font-weight: 700) {
+  $font-size: 120px;
+  $font-size-640: 80px;
+  $font-size-print: 40pt;
+  @include _core-font-generator($font-size, $font-size-640, $font-size-print, $line-height, $line-height-640, $tabular-numbers, $font-weight);
+}
+
+
+
+.bold-omglarge {
+  @include bold-120();
+
+}
+.bold-xxxlarge {
+ @include bold-48();
+}

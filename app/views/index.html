@@ -4,10 +4,11 @@
 	<link href="{{ asset_path }}stylesheets/dashboard.css?{{ startTime }}" rel="stylesheet" type="text/css">
 {% endblock %}
 
-
 {% block header_class %}
 	with-proposition
 {% endblock %}
+
+{% block body_classes %}dashboard{% endblock %}
 
 {% block proposition_header %}
 	<div class="header-proposition">
@@ -20,10 +21,9 @@
 {% endblock %}
 
 {% block content %}
-
+	<main id="content">test</main>
 {% endblock content %}
 
 {% block body_end %}
-
 	<script src="/javascripts/dashboard.bundle.js"></script>
 {% endblock %}

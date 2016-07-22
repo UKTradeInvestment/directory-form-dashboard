@@ -27,9 +27,6 @@ app.set('views', [
 	`${__dirname}/node_modules/govstrap/nunjucks`
 ]);
 
-console.log(`TEMPLATES: ${__dirname}/node_modules/govuk_template_jinja/views`);
-
-
 nunjucks.setup(nunjucksConfig, app);
 
 // Add extra filters to nunjucks
