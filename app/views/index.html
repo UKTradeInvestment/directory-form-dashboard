@@ -1,0 +1,29 @@
+{% extends "layouts/govuk_template.html" %}
+
+{% block head %}
+	<link href="{{ asset_path }}stylesheets/dashboard.css?{{ startTime }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block header_class %}
+	with-proposition
+{% endblock %}
+
+{% block proposition_header %}
+	<div class="header-proposition">
+		<div class="content">
+			<nav id="proposition-menu">
+				<a href="/" id="proposition-name">UK Exporter Directory</a>
+			</nav>
+		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+{% endblock content %}
+
+{% block body_end %}
+
+	<script src="/javascripts/dashboard.bundle.js"></script>
+{% endblock %}

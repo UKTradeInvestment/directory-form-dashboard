@@ -1,7 +1,0 @@
-/*@import "govuk-elements";*/
-@import "elements";
-@import "grid_layout";
-
-#content {
-  @extend %site-width-container;
-}
