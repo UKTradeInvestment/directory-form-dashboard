@@ -1,0 +1,26 @@
+{
+  "name": "directory-form-dashboard",
+  "version": "0.0.1",
+  "description": "Dashboard to show directory form statistics",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/webapp/app.js",
+    "watch": "nodemon src/webapp/app.js",
+    "sass-watch": "sass --style expanded --line-numbers --load-path node_modules/govuk_frontend_toolkit/stylesheets --load-path node_modules/govuk-elements-sass/public/sass --watch src/public/sass/main.scss:src/public/css/main.css",
+    "sass-dev": "sass --style expanded --line-numbers --load-path node_modules/govuk_frontend_toolkit/stylesheets --load-path node_modules/govuk-elements-sass/public/sass src/public/sass/main.scss src/public/css/main.css",
+    "sass-prod": "sass --style compressed --load-path node_modules/govuk_frontend_toolkit/stylesheets --load-path node_modules/govuk-elements-sass/public/sass src/public/sass/main.scss src/public/css/main.css"
+  },
+  "author": "Graham Veal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "govuk-elements-sass": "^1.2.1",
+    "govuk_frontend_toolkit": "^4.13.0",
+    "morgan": "^1.7.0",
+    "nunjucks": "^2.4.2",
+    "serve-static": "^1.11.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
+}
