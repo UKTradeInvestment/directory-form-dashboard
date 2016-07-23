@@ -13,6 +13,15 @@ class Dashboard extends Component {
 		this.props.getAnalytics();
 	}
 
+	componentWillUnmount() {
+		clearTimeout(this.timeout);
+	}
+
+	componentWillReceiveProps() {
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(() => this.props.getAnalytics(), 10000);
+	}
+
 	render() {
 
 		const visitors = this.props.visitors;

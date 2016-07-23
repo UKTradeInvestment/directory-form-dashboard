@@ -38,10 +38,37 @@ function getViewAnalytics(client, analytics, viewID, startDate, endDate) {
 		analytics.data.ga.get({
 				'auth': client,
 				'ids': viewID,
-				'metrics': 'ga:users',
+				'metrics': 'ga:sessions',
 				'start-date': startDate,
 				'end-date': endDate,
-				'dimensions': 'ga:deviceCategory'
+				'dimensions': 'ga:deviceCategory',
+			},
+			callback);
+	});
+
+}
+
+function getSubmissionAnalytics(client, analytics, viewID, startDate, endDate) {
+
+	return new Promise(function(resolve, reject) {
+
+		function callback(error, response) {
+			if (error) {
+				console.log('getViewAnalytics failed: ' + error);
+				reject(error);
+			} else {
+				resolve(response);
+			}
+		}
+
+		analytics.data.ga.get({
+				'auth': client,
+				'ids': viewID,
+				'metrics': 'ga:pageviews',
+				'dimensions': 'ga:pagePath',
+				'start-date': startDate,
+				'end-date': endDate,
+				'filters': 'ga:pagePath==/thanks'
 			},
 			callback);
 	});
@@ -84,19 +111,34 @@ function getData() {
 			return getViewAnalytics(client, analytics, config.ga.viewID, TODAY, TODAY);
 		})
 		.then((result) => {
-			combinedResults.today = result.totalsForAllResults;
+			combinedResults.today = {
+				sessions: result.totalsForAllResults['ga:sessions']
+			};
 			return getViewAnalytics(client, analytics, config.ga.viewID, LASTWEEK, TODAY)
 		})
 		.then((result) => {
-			combinedResults.week = result.totalsForAllResults;
+
+			combinedResults.week = {
+				sessions: result.totalsForAllResults['ga:sessions']
+			};
+
 			combinedResults.devices = {};
 			for (const device of result.rows) {
 				combinedResults.devices[device[0]] = parseInt(device[1], 10);
 			}
+
 			return getRightNow(client, analytics, config.ga.viewID);
 		})
 		.then((result) => {
-			combinedResults.now = result.totalsForAllResults;
+			combinedResults.now = result.totalsForAllResults['rt:ActiveUsers'];
+			return getSubmissionAnalytics(client, analytics, config.ga.viewID, LASTWEEK, TODAY);
+		})
+		.then((result) => {
+			combinedResults.week.submissions = result.totalsForAllResults['ga:pageviews'];
+			return getSubmissionAnalytics(client, analytics, config.ga.viewID, TODAY, TODAY);
+		})
+		.then((result) => {
+			combinedResults.today.submissions = result.totalsForAllResults['ga:pageviews'];
 			return combinedResults;
 		})
 		.catch((error) => {

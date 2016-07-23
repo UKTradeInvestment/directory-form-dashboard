@@ -8,6 +8,9 @@ export const BrowserShare = props =>  {
 	// convert the pie chart raw data into percentages
 	const total = props.data.desktop + props.data.mobile + props.data.tablet;
 
+	if (total === 0) {
+		return <div>Loading...</div>;
+	}
 
 	var pieData = [
 		{
