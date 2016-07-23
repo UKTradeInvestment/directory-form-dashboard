@@ -45,3 +45,7 @@ $images-dir: '/images/';
 .bold-xxxlarge {
  @include bold-48();
 }
+
+.rd3-chart {
+  margin-top: 40px;
+}

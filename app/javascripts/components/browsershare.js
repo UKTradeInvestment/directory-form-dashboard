@@ -1,32 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
 import rd3 from 'rd3';
 
-export default class BrowserShare extends Component {
+export const BrowserShare = props =>  {
 
-	render() {
-		const PieChart = rd3.PieChart;
+	const PieChart = rd3.PieChart;
 
-		var pieData = [
-			{
-				label: "Desktop",
-				value: 70.0
-			}, {
-				label: "Tablet",
-				value: 20.0
-			}, {
-				label: "Phone",
-				value: 25.0
-			}];
+	// convert the pie chart raw data into percentages
+	const total = props.data.desktop + props.data.mobile + props.data.tablet;
 
-		return (
-			<PieChart
-				data={pieData}
-				width={700}
-				height={500}
-				radius={210}
-				innerRadius={20}
-				sectorBorderColor="white"/>
-		);
-	}
 
-}
+	var pieData = [
+		{
+			label: "Desktop",
+			value: Math.round((props.data.desktop/total) * 100)
+		}, {
+			label: "Mobile",
+			value: Math.round((props.data.mobile/total) * 100)
+		}, {
+			label: "Tablet",
+			value: Math.round((props.data.tablet/total) * 100)
+		}];
+
+
+	return (
+		<PieChart
+			data={pieData}
+			width={700}
+			height={500}
+			radius={200}
+			innerRadius={20}
+			sectorBorderColor="white"/>
+	);
+
+};
+
+BrowserShare.propTypes = {
+	data: React.PropTypes.object
+};

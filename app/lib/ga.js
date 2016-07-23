@@ -3,6 +3,8 @@
 var config  = require('../../config');
 var google = require('googleapis');
 
+const TODAY = 'today';
+const LASTWEEK = '7daysAgo';
 
 
 //return a an authenticated Google API client
@@ -20,14 +22,13 @@ function getJwtClient() {
 	});
 }
 
-//this is a test query to get the last year of data for a single view id
-function getThisYearViewAnalytics(client, analytics, viewID) {
+function getViewAnalytics(client, analytics, viewID, startDate, endDate) {
 
 	return new Promise(function(resolve, reject) {
 
 		function callback(error, response) {
 			if (error) {
-				console.log('getThisYearViewAnalytics failed: ' + error);
+				console.log('getViewAnalytics failed: ' + error);
 				reject(error);
 			} else {
 				resolve(response);
@@ -37,43 +38,71 @@ function getThisYearViewAnalytics(client, analytics, viewID) {
 		analytics.data.ga.get({
 				'auth': client,
 				'ids': viewID,
-				'metrics': 'ga:sessions,ga:pageviews,ga:users',
-				'start-date': '365daysAgo',
-				'end-date': 'today',
+				'metrics': 'ga:users',
+				'start-date': startDate,
+				'end-date': endDate,
+				'dimensions': 'ga:deviceCategory'
 			},
 			callback);
 	});
+
+}
+
+function getRightNow(client, analytics, viewID) {
+
+	return new Promise(function(resolve, reject) {
+
+		function callback(error, response) {
+			if (error) {
+				console.log('getRightNow failed: ' + error);
+				reject(error);
+			} else {
+				resolve(response);
+			}
+		}
+
+		analytics.data.realtime.get({
+				'auth': client,
+				'ids': viewID,
+				'metrics': 'rt:ActiveUsers'
+			},
+			callback);
+	});
+
 }
 
 // go get it all
 function getData() {
 
 	let client;
-	let analytics;
+	let analytics = google.analytics('v3');
+	let combinedResults = {};
 
 	return getJwtClient()
 		.then((jwtClient) => {
 			client = jwtClient;
-			analytics = google.analytics('v3');
-			return getThisYearViewAnalytics(client, analytics, config.ga.viewID);
-		});
-
-
-		/*
-		.then(function(result) {
-
-			console.log('total users: ' + result.totalsForAllResults["ga:users"]);
-			console.log('total sessions: ' + result.totalsForAllResults["ga:pageviews"]);
-			console.log('total pageviews: ' + result.totalsForAllResults["ga:sessions"]);
-			return getCurrentUsercount(client, analytics, viewID);
+			return getViewAnalytics(client, analytics, config.ga.viewID, TODAY, TODAY);
 		})
 		.then((result) => {
-			console.log('Current users: ' + result.totalsForAllResults["rt.activeUsers"]);
+			combinedResults.today = result.totalsForAllResults;
+			return getViewAnalytics(client, analytics, config.ga.viewID, LASTWEEK, TODAY)
 		})
-		.catch(function(error) {
-			console.log("go promise chain failed", error);
+		.then((result) => {
+			combinedResults.week = result.totalsForAllResults;
+			combinedResults.devices = {};
+			for (const device of result.rows) {
+				combinedResults.devices[device[0]] = parseInt(device[1], 10);
+			}
+			return getRightNow(client, analytics, config.ga.viewID);
+		})
+		.then((result) => {
+			combinedResults.now = result.totalsForAllResults;
+			return combinedResults;
+		})
+		.catch((error) => {
+			console.log(error);
 		});
-		 */
+
 }
 
 

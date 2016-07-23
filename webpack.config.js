@@ -6,7 +6,7 @@ module.exports = {
   devtool: prod ? 'hidden-source-map' : 'cheap-module-source-map',
 
   entry: {
-    dashboard: `${paths.sourceJS}/dashboard.js`
+    dashboard: `${paths.sourceJS}/dashboardclientapp.js`
   },
   output: {
     path: paths.outputJS,
