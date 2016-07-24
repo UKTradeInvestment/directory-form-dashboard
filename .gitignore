@@ -26,3 +26,4 @@ node_modules/
 *.log
 
 .env
+secrets.json
